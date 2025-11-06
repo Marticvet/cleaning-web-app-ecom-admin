@@ -1,0 +1,237 @@
+/* --- Full-screen canvas & sane defaults --- */
+html, body, #root { height: 100%; }
+body { margin: 0; }
+
+:root {
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --primary: #2563eb;
+  --primary-600: #1d4ed8;
+  --ring: rgba(37, 99, 235, 0.35);
+  --border: #e2e8f0;
+  --error: #dc2626;
+}
+
+/* Fill the whole viewport with a subtle gradient */
+.loginPageContainer {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 32px);
+  background:
+    radial-gradient(1200px 600px at 10% -20%, rgba(37,99,235,.10), transparent 60%),
+    radial-gradient(900px 500px at 110% 0%, rgba(99,102,241,.12), transparent 60%),
+    var(--bg);
+}
+
+/* Card — narrower max width & fluid clamp so it never looks too wide */
+.loginCard {
+  width: clamp(280px, 90vw, 380px);   /* was min(100%, 420px) */
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 30px rgba(2, 6, 23, .08),
+    0 4px 10px rgba(2, 6, 23, .05);
+  padding: clamp(18px, 4vw, 24px);    /* slightly tighter */
+  display: grid;
+  gap: 14px;
+  animation: cardIn 420ms cubic-bezier(.21,1,.21,1);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px) scale(.985); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* Header — responsive typography */
+.loginHeader {
+  text-align: center;
+  display: grid;
+  gap: 6px;
+}
+.loginHeader h1 {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(20px, 4.2vw, 26px); /* scale better on tiny screens */
+  letter-spacing: -.02em;
+  color: #111827;
+}
+.loginHeader p {
+  margin: 0;
+  color: var(--muted);
+  /* font-size: clamp(0.9rem, 2.8vw, .95rem); */
+  font-size: 1.1rem;
+}
+
+/* Form & fields */
+.loginForm { display: grid; gap: 12px; }
+
+.field label {
+  display: block;
+  font-size: .9rem;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.field input[type="email"],
+.field input[type="password"],
+.pwWrap input {
+  width: 90%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: clamp(0.95rem, 3.2vw, 1rem); /* adaptive input text size */
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 60ms ease;
+}
+
+.field input:focus,
+.pwWrap input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+.pwWrap { position: relative; }
+.pwToggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  translate: 0 -50%;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: .9rem;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+.pwToggle:hover { color: var(--text); }
+
+/* Row (remember + forgot) — wrap sooner on small screens */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  color: var(--muted);
+  font-size: .92rem;
+}
+.checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
+
+.link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+.link:hover { text-decoration: underline; }
+
+/* Error */
+.error {
+  background: #fee2e2;
+  color: var(--error);
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: .92rem;
+}
+
+/* Submit button */
+.submitBtn {
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: clamp(0.95rem, 3.2vw, 1rem);
+  cursor: pointer;
+  background: linear-gradient(180deg, var(--primary), var(--primary-600));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, .25);
+  transition: transform 60ms ease, filter 120ms ease, box-shadow 150ms ease;
+}
+.submitBtn:hover { filter: brightness(1.04); }
+.submitBtn:active { transform: translateY(1px); }
+.submitBtn:disabled { opacity: .7; cursor: not-allowed; filter: saturate(.7); }
+
+/* --- Small-screen polish --- */
+@media (max-width: 380px) {
+  .loginCard { width: 94vw; border-radius: 12px; padding: 16px; }
+  .row { gap: 8px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .loginCard { animation: none; }
+  .submitBtn { transition: none; }
+}
+
+
+/* Make sure nothing overflows on tiny screens */
+.loginPageContainer {
+    overflow: auto;                 /* allow scroll if keyboard pushes things up */
+    padding: clamp(8px, 3vw, 32px); /* a little tighter on small widths */
+  }
+  
+  /* Card: full-width on phones, narrower cap on desktops */
+  .loginCard {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 360px;               /* was wider; this feels better on mobile */
+  }
+  
+  /* Give password input room for the "Show" button */
+  .pwWrap input {
+    padding-right: 64px;            /* prevents text under the toggle */
+  }
+  .pwToggle {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+  
+  /* Inputs: slightly smaller text on tiny screens */
+  .field input[type="email"],
+  .field input[type="password"],
+  .pwWrap input {
+    font-size: clamp(0.9rem, 3.2vw, 1rem);
+  }
+  
+  /* Row: stack on small screens so it never feels squished */
+  @media (max-width: 420px) {
+    .row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .loginCard {
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow:
+        0 8px 22px rgba(2, 6, 23, .07),
+        0 3px 8px rgba(2, 6, 23, .05);
+    }
+  }
+  
+  /* Ultra-small devices */
+  @media (max-width: 340px) {
+    .loginCard { max-width: 320px; }
+  }
+  
