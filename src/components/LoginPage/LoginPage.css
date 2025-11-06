@@ -235,3 +235,26 @@ body { margin: 0; }
     .loginCard { max-width: 320px; }
   }
   
+  .loginPageContainer {
+    position: fixed;
+    inset: 0;
+    display: flex;                  /* use flex for easy vertical centering */
+    justify-content: center;
+    align-items: center;            /* centers the card vertically */
+    flex-direction: column;
+    overflow-y: auto;               /* allow scroll if keyboard appears */
+    padding: clamp(16px, 4vw, 40px);
+    background:
+      radial-gradient(1200px 600px at 10% -20%, rgba(37,99,235,.10), transparent 60%),
+      radial-gradient(900px 500px at 110% 0%, rgba(99,102,241,.12), transparent 60%),
+      #f6f8fb;
+  }
+  
+  /* On small screens: move the card slightly down from exact center */
+  @media (max-height: 700px) {
+    .loginPageContainer {
+      justify-content: flex-start;
+      padding-top: 40px;
+    }
+  }
+  
