@@ -199,9 +199,6 @@ body { margin: 0; }
   }
   
   /* Give password input room for the "Show" button */
-  .pwWrap input {
-    padding-right: 64px;            /* prevents text under the toggle */
-  }
   .pwToggle {
     font-size: 0.85rem;
     padding: 6px 10px;
