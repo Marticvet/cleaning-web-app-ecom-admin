@@ -1,5 +1,7 @@
 import * as React from "react";
 import "./LoginPage.css";
+import { useAuth } from "../../auth/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
 // If you're using Supabase, uncomment below and wire it up.
 // import { supabase } from "@/supabaseClient";
 
@@ -8,34 +10,35 @@ export default function LoginPage() {
     const [loading, setLoading] = React.useState(false);
     const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
+    const { signInWithPassword, isAuthed } = useAuth();
+    const navigation = useNavigate();
+    const loc = useLocation();
+    const from = loc.state?.from?.pathname || "/";
+
+    React.useEffect(() => {
+        if (isAuthed) {
+            navigation("/");
+        }
+    }, [isAuthed, from, navigation]);
+
     async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setErrorMsg(null);
         setLoading(true);
 
         const form = new FormData(e.currentTarget);
+        const email = form.get("email") as string;
+        const password = form.get("password") as string;
 
-        console.log(form, `form`);
-        
+        const error = await signInWithPassword(email, password);
 
-        // const email = (form.get("email") as string)?.trim();
-        // const password = (form.get("password") as string) ?? "";
+        if (error !== null) {
+            setErrorMsg("Invalid login credentials.");
+            setLoading(false);
+            return;
+        }
 
-        // try {
-        //     // ---- Example with Supabase auth ----
-        //     // const { error } = await supabase.auth.signInWithPassword({ email, password });
-        //     // if (error) throw error;
-
-        //     // Simulate success for now:
-        //     await new Promise((r) => setTimeout(r, 700));
-        //     // redirect or navigate here
-        //     // location.href = "/";
-        //     console.log("Signed in:", email);
-        // } catch (err) {
-        //     // setErrorMsg(err?.message || "Login failed. Please try again.");
-        // } finally {
-        //     setLoading(false);
-        // }
+        navigation("/dashboard");
     }
 
     return (
@@ -90,12 +93,12 @@ export default function LoginPage() {
                         </div>
                     </div>
 
-                    <div className="row">
+                    {/* <div className="row">
                         <label className="checkbox">
                             <input type="checkbox" name="remember" />{" "}
                             <span>Remember me</span>
                         </label>
-                    </div>
+                    </div> */}
 
                     {errorMsg && (
                         <div
