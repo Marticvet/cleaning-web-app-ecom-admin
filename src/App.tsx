@@ -1,24 +1,11 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import { AuthProvider, useAuth } from "./auth/AuthProvider";
+import { AuthProvider } from "./auth/AuthProvider";
 import LoginPage from "./components/LoginPage/LoginPage";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { PublicOnly } from "./auth/PublicOnly";
 
 // src/components/LogoutButton.tsx
-import { useNavigate } from "react-router-dom";
-
-export function LogoutButton() {
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const onClick = async () => {
-    await signOut();
-    navigate("/login", { replace: true });
-  };
-
-  return <button onClick={onClick}>Sign out</button>;
-}
 
 
 // --- your pages ---
@@ -39,7 +26,7 @@ const router = createBrowserRouter([
     {
       element: <ProtectedRoute />,
       children: [
-        { path: "/dashboard", element: <LogoutButton /> },
+        { path: "/dashboard", element: <>dashboard</>},
       ],
     },
   

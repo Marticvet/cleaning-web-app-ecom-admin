@@ -1,0 +1,237 @@
+.navbarWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgb(251, 251, 251);
+    width: 100%;
+    padding: 0 16px;
+    /* height: 2.8rem; */
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.08),
+        0 2px 6px rgba(0, 0, 0, 0.06);
+    backdrop-filter: saturate(140%) blur(6px);
+    height: 64px;
+    --nav-height: 64px;
+    /* add this line */
+}
+
+.brand {
+    margin-left: 16px;
+}
+
+/* Brand */
+.brand a {
+    color: #0f172a;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: .2px;
+    /* margin-left: 44px; */
+}
+
+/* Desktop links */
+.navButtonsWrapper {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: center;
+    gap: 12px;
+}
+
+.navButton {
+    font-size: 1.1rem;
+    color: #0f172a;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background-color .15s ease, color .15s ease;
+    font-weight: 600;
+}
+
+.navButton:hover {
+    background-color: rgba(15, 23, 42, 0.06);
+}
+
+/* Hamburger button (hidden on desktop) */
+.hamburger {
+    display: none;
+    width: 48px;
+    height: 48px;
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 101;
+}
+
+.hamburger:hover {
+    background: rgba(15, 23, 42, 0.06);
+}
+
+.hamburgerIcon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    stroke: #0f172a;
+    fill: none;
+    pointer-events: none;
+}
+
+/* Mobile menu panel (hidden by default) */
+.mobileMenu {
+    position: fixed;
+    top: var(--nav-height);
+    /* directly under navbar */
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    display: none;
+    flex-direction: column;
+    padding: 10px 16px 16px;
+    gap: 8px;
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .18s ease, opacity .18s ease;
+    z-index: 99;
+}
+
+.mobileLink {
+    display: block;
+    padding: 12px 10px;
+    border-radius: 10px;
+    color: #0f172a;
+    text-decoration: none;
+    font-size: 1.05rem;
+}
+
+.mobileLink:hover {
+    background: rgba(15, 23, 42, 0.06);
+}
+
+/* Backdrop behind mobile menu */
+.scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.25);
+    z-index: 98;
+}
+
+/* ---------- Under 993px: hamburger on, desktop links off ---------- */
+/* --- Mobile menu: shadow + rounded bottom corners when visible --- */
+@media (max-width: 992px) {
+    .navButtonsWrapper {
+        display: none;
+    }
+
+    .hamburger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobileMenu {
+        display: flex;
+
+        /* keep your existing positioning; just prep for rounded corners */
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 0 0 8px 8px;
+        /* bottom corners rounded */
+        overflow: hidden;
+        /* clip inner corners */
+        /* smooth visual transition */
+        transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+    }
+
+    /* only show shadow when open */
+    .mobileMenu.open {
+        box-shadow:
+            0 14px 28px rgba(0, 0, 0, 0.12),
+            0 4px 12px rgba(0, 0, 0, 0.08);
+
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* --- Link separators (solid) --- */
+    .mobileLink {
+        padding: 14px 12px;
+        /* a hair more touch target */
+        border-bottom: 1px solid #e5e7eb;
+        /* solid separator */
+    }
+
+    .mobileLink:last-child {
+        border-bottom: none;
+        /* no line after last item */
+    }
+
+}
+
+/* Header layout: 3 columns = left logo, centered nav, right actions */
+.navbarWrapper {
+    display: grid;
+    /* was: flex */
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgb(251, 251, 251);
+    width: 100%;
+    padding: 0 16px;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.08),
+        0 2px 6px rgba(0, 0, 0, 0.06);
+    backdrop-filter: saturate(140%) blur(6px);
+    height: 64px;
+    --nav-height: 64px;
+}
+
+/* place items in the grid cells */
+.brand {
+    grid-column: 1;
+    justify-self: start;
+    margin-left: 16px;
+}
+
+.navButtonsWrapper {
+    grid-column: 2;
+    /* center column */
+    justify-self: center;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: center;
+    gap: 12px;
+}
+
+.hamburger {
+    grid-column: 3;
+    justify-self: end;
+}
+
+/* Mobile: hide center nav, show hamburger */
+@media (max-width: 992px) {
+    .navButtonsWrapper {
+        display: none;
+    }
+
+    .hamburger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Desktop: hide hamburger (keeps its grid column so nav stays centered) */
+@media (min-width: 993px) {
+    .hamburger {
+        display: none;
+    }
+}

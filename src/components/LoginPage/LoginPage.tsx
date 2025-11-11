@@ -30,15 +30,16 @@ export default function LoginPage() {
         const email = form.get("email") as string;
         const password = form.get("password") as string;
 
-        const error = await signInWithPassword(email, password);
+        const error = await signInWithPassword(email.trim(), password.trim());
 
         if (error !== null) {
             setErrorMsg("Invalid login credentials.");
             setLoading(false);
+            // 4) (optional) Clear the form either way
             return;
         }
 
-        navigation("/dashboard");
+        // form.reset();
     }
 
     return (
@@ -54,7 +55,11 @@ export default function LoginPage() {
                     <p id="login_desc">Sign in to manage your dashboard.</p>
                 </header>
 
-                <form className="loginForm" onSubmit={onSubmit} noValidate>
+                <form
+                    className="loginForm"
+                    onSubmit={onSubmit}
+                    auto-complete="on"
+                >
                     <div className="field">
                         <label htmlFor="email">Email</label>
                         <input
