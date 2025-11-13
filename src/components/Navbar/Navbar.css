@@ -1,20 +1,3 @@
-/* put in a global CSS (e.g., index.css) loaded before Navbar.css */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-}
-
-html,
-body {
-    overflow-x: hidden;
-}
-
 .navbarWrapper {
     display: flex;
     justify-content: space-between;

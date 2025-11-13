@@ -2,8 +2,6 @@ import * as React from "react";
 import "./LoginPage.css";
 import { useAuth } from "../../auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
-// If you're using Supabase, uncomment below and wire it up.
-// import { supabase } from "@/supabaseClient";
 
 export default function LoginPage() {
     const [showPw, setShowPw] = React.useState(false);
