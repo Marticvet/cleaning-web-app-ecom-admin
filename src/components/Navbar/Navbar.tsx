@@ -71,12 +71,6 @@ export default function Navbar() {
                 <Link className="navButton" to="/">
                     Home
                 </Link>
-                <Link className="navButton" to="/ueber-uns">
-                    Über uns
-                </Link>
-                <Link className="navButton" to="/dienstleistungen">
-                    Dienstleistungen
-                </Link>
                 <Link className="navButton" to="/" onClick={onClick}>
                     Logout
                 </Link>
@@ -120,12 +114,6 @@ export default function Navbar() {
                 <Link className="mobileLink" to="/" onClick={close}>
                     Home
                 </Link>
-                {/* <Link className="mobileLink" to="/ueber-uns" onClick={close}>
-                    Über uns
-                </Link>
-                <Link className="mobileLink" to="/leistungen" onClick={close}>
-                    Leistungen
-                </Link> */}
                 <Link className="mobileLink" to="/" onClick={onClick}>
                     Logout
                 </Link>

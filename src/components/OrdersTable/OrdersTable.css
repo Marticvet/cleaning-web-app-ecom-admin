@@ -1,0 +1,149 @@
+.orders {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(2, 6, 23, 0.06);
+    overflow: hidden;
+    margin: clamp(12px, 3vw, 32px);
+}
+
+/* Table defaults (desktop/tablet) */
+.ordersTable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* better truncation */
+}
+
+.ordersTable th,
+.ordersTable td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* stop super long text overflow */
+}
+
+.ordersTable thead th {
+    background: #f3f4f5;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.ordersTable tbody tr:hover {
+    background: #edeff2;
+    cursor: pointer;
+}
+
+/* ---------- Phone layout: rows become labeled cards ---------- */
+@media (max-width: 768px) {
+    .orders {
+        margin: 12px;
+        overflow: visible;
+    }
+
+    .ordersTable thead {
+        display: none;
+    }
+
+    .ordersTable,
+    .ordersTable tbody,
+    .ordersTable tr,
+    .ordersTable td {
+        display: block;
+        width: 100%;
+    }
+
+    .ordersTable tr {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        margin: 12px 0;
+        padding: 8px 10px;
+        box-shadow: 0 1px 3px rgba(2, 6, 23, 0.06);
+    }
+
+    .ordersTable td {
+        border: 0;
+        padding: 10px 6px;
+        display: grid;
+        /* label/value grid */
+        grid-template-columns: 40% 1fr;
+        /* label | value */
+        gap: 8px 12px;
+        white-space: normal;
+        /* allow wrapping on phones */
+    }
+
+    .ordersTable td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #475569;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Even smaller phones */
+@media (max-width: 420px) {
+    .ordersTable td {
+        grid-template-columns: 48% 1fr;
+    }
+}
+
+/* Status badges (single, de-duplicated block) */
+.badge {
+    display: inline-flex;
+    /* keeps height tight */
+    align-items: center;
+    padding: 3px 8px;
+    /* tighter pill */
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 3.2vw, 0.85rem);
+    /* scale down on phones */
+    white-space: nowrap;
+    width: fit-content;
+    /* hug content */
+    max-width: 100%;
+}
+
+/* Prevent badge from stretching in flex/grid cells */
+.ordersTable td .badge {
+    flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+    .ordersTable td .badge {
+        justify-self: start;
+    }
+}
+
+/* Badge colors */
+.badge.new {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.badge.in_progress {
+    background: #fff7ed;
+    color: #b45309;
+}
+
+.badge.scheduled {
+    background: #ecfeff;
+    color: #0e7490;
+}
+
+.badge.done {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.badge.cancelled {
+    background: #fef2f2;
+    color: #b91c1c;
+}

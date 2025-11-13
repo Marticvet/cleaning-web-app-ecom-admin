@@ -4,6 +4,7 @@ import { AuthProvider } from "./auth/AuthProvider";
 import LoginPage from "./components/LoginPage/LoginPage";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { PublicOnly } from "./auth/PublicOnly";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 // src/components/LogoutButton.tsx
 
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
     {
       element: <ProtectedRoute />,
       children: [
-        { path: "/dashboard", element: <>dashboard</>},
+        { path: "/dashboard", element: <Dashboard />},
       ],
     },
   
