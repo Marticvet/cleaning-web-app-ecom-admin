@@ -8,8 +8,11 @@ type AuthContextType = {
     session: Session | null;
     user: User | null;
     isAuthed: boolean;
-    isAdmin: boolean | null; // NEW
-    signInWithPassword: (email: string, password: string) => Promise<Error | null>;
+    isAdmin: boolean | null;
+    signInWithPassword: (
+        email: string,
+        password: string
+    ) => Promise<Error | null>;
     signOut: () => Promise<void>;
 };
 
@@ -19,38 +22,94 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [session, setSession] = React.useState<Session | null>(null);
     const [user, setUser] = React.useState<User | null>(null);
     const [loading, setLoading] = React.useState(true);
-    const [isAdmin, setIsAdmin] = React.useState<boolean | null>(null); // NEW
+    const [isAdmin, setIsAdmin] = React.useState<boolean | null>(null);
+
+    // abortable admin fetch (prevents setting state after user switches/unmount)
+    const adminAbortRef = React.useRef<AbortController | null>(null);
+
+    const logoutAndReset = React.useCallback(async () => {
+        try {
+            await supabase.auth.signOut();
+        } catch {
+            setSession(null);
+            setUser(null);
+            setIsAdmin(null);
+            setLoading(false);
+        }
+    }, []);
 
     async function refreshAdminFlag(uid?: string | null) {
+        // cancel any in-flight admin fetch
+        adminAbortRef.current?.abort();
+        adminAbortRef.current = new AbortController();
+        const signal = adminAbortRef.current.signal;
+
         if (!uid) {
             setIsAdmin(null);
             return;
         }
-        const { data, error } = await supabase
-            .from("profiles")
-            .select("is_admin")
-            .eq("id", uid)
-            .maybeSingle();
-        setIsAdmin(error ? null : Boolean(data?.is_admin));
+        try {
+            const { data, error } = await supabase
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", uid)
+                .maybeSingle();
+
+            if (signal.aborted) return;
+            if (error) {
+                // table missing / 404 policy / network -> treat as unknown
+                setIsAdmin(null);
+            } else {
+                setIsAdmin(Boolean(data?.is_admin));
+            }
+        } catch {
+            if (!signal.aborted) setIsAdmin(null);
+        }
     }
 
     React.useEffect(() => {
-        // Initial session fetch
+        let mounted = true;
+
+        // Initial session
         supabase.auth.getSession().then(({ data }) => {
+            if (!mounted) return;
             setSession(data.session ?? null);
             setUser(data.session?.user ?? null);
             refreshAdminFlag(data.session?.user?.id);
-            setLoading(false); // <-- ALWAYS end loading, even if no session
+            setLoading(false);
         });
 
         // Subscribe to auth changes
-        const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-            setSession(s);
+        const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
+            // Possible events: SIGNED_IN, SIGNED_OUT, TOKEN_REFRESHED, USER_UPDATED, PASSWORD_RECOVERY
+            setSession(s ?? null);
             setUser(s?.user ?? null);
             refreshAdminFlag(s?.user?.id);
+
+            if (event === "SIGNED_OUT") {
+                // refresh failed or explicit logout
+                setIsAdmin(null);
+            }
             setLoading(false);
         });
-        return () => sub.subscription.unsubscribe();
+
+        // Optional: when tab becomes visible after a long idle, ask Supabase for a fresh session
+        const onVisible = async () => {
+            if (document.visibilityState === "visible") {
+                const { data } = await supabase.auth.getSession();
+                setSession(data.session ?? null);
+                setUser(data.session?.user ?? null);
+                refreshAdminFlag(data.session?.user?.id);
+            }
+        };
+        document.addEventListener("visibilitychange", onVisible);
+
+        return () => {
+            mounted = false;
+            sub.subscription.unsubscribe();
+            document.removeEventListener("visibilitychange", onVisible);
+            adminAbortRef.current?.abort();
+        };
     }, []);
 
     async function signInWithPassword(email: string, password: string) {
@@ -58,12 +117,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email,
             password,
         });
-
-        return error;
+        return error ?? null; // return null on success
     }
 
     async function signOut() {
-        await supabase.auth.signOut();
+        await logoutAndReset();
     }
 
     const value: AuthContextType = {
@@ -71,7 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         session,
         user,
         isAuthed: !!user,
-        isAdmin, // NEW
+        isAdmin,
         signInWithPassword,
         signOut,
     };
