@@ -27,16 +27,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // abortable admin fetch (prevents setting state after user switches/unmount)
     const adminAbortRef = React.useRef<AbortController | null>(null);
 
+    const resetState = React.useCallback(() => {
+        setSession(null);
+        setUser(null);
+        setIsAdmin(null);
+        setLoading(false);
+    }, []);
+
     const logoutAndReset = React.useCallback(async () => {
         try {
             await supabase.auth.signOut();
-        } catch {
-            setSession(null);
-            setUser(null);
-            setIsAdmin(null);
-            setLoading(false);
+        } finally {
+            // always reset locally, even if supabase throws
+            resetState();
         }
-    }, []);
+    }, [resetState]);
 
     async function refreshAdminFlag(uid?: string | null) {
         // cancel any in-flight admin fetch
@@ -57,7 +62,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             if (signal.aborted) return;
             if (error) {
-                // table missing / 404 policy / network -> treat as unknown
                 setIsAdmin(null);
             } else {
                 setIsAdmin(Boolean(data?.is_admin));
@@ -81,7 +85,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Subscribe to auth changes
         const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
-            // Possible events: SIGNED_IN, SIGNED_OUT, TOKEN_REFRESHED, USER_UPDATED, PASSWORD_RECOVERY
             setSession(s ?? null);
             setUser(s?.user ?? null);
             refreshAdminFlag(s?.user?.id);
@@ -122,6 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     async function signOut() {
         await logoutAndReset();
+        // no navigate here → ProtectedRoute / LogoutRoute handles where to go
     }
 
     const value: AuthContextType = {
