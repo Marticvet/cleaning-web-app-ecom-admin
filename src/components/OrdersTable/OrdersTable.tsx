@@ -16,10 +16,10 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                 <thead>
                     <tr>
                         <th>Bestellung #</th>
-                        <th>Kunden</th>
+                        <th>Kunden Name</th>
                         <th>Service</th>
                         <th>Erstellt am</th>
-                        <th>Gesamt</th>
+                        <th>Preis</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -28,12 +28,12 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                     {rows.map((r) => (
                         <tr key={r.id}>
                             <td data-label="Bestellung #">{r.id}</td>
-                            <td data-label="Kunden">{r.customer}</td>
+                            <td data-label="Kunden Name">{r.customer}</td>
                             <td data-label="Service">{r.service}</td>
                             <td data-label="Erstellt am">
                                 {new Date(r.createdAt).toLocaleDateString()}
                             </td>
-                            <td data-label="Gesamt">€{r.total.toFixed(2)}</td>
+                            <td data-label="Preis">€{r.total.toFixed(2)}</td>
                             <td data-label="Status">
                                 <span className={`badge ${r.status}`}>
                                     {pretty(r.status)}

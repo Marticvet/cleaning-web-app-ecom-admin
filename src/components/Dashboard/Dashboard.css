@@ -1,0 +1,35 @@
+/* Full-height, mobile-safe dashboard canvas */
+.dashboardWrapperContainer {
+    min-height: 100dvh;
+    /* better than 100vh on mobile */
+    /* soft, clean background */
+    background:
+        radial-gradient(1200px 600px at 10% -20%, rgba(37, 99, 235, 0.08), transparent 60%),
+        radial-gradient(900px 500px at 110% 0%, rgba(99, 102, 241, 0.10), transparent 60%),
+        #f6f8fb;
+    /* base color */
+
+    /* comfortable, responsive padding + iOS safe areas */
+    padding:
+        max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+
+    /* center inner content (your .orders block) */
+    display: grid;
+    align-items: start;
+}
+
+/* Constrain the table card nicely on large screens */
+.dashboardWrapperContainer .orders {
+    width: min(100%, 1024px);
+    /* cap width for readability */
+    margin: clamp(12px, 2.5vw, 24px) auto;
+    /* keep side margins on phones/desktop */
+}
+
+/* Slightly tighter side padding on very small phones */
+@media (max-width: 420px) {
+    .dashboardWrapperContainer {
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+    }
+}

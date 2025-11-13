@@ -147,3 +147,117 @@
     background: #fef2f2;
     color: #b91c1c;
 }
+
+/* --- Fix mobile "stray border" before the first card --- */
+@media (max-width: 768px) {
+
+    /* Remove the outer box/border so only cards have borders */
+    .orders {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        overflow: visible;
+        margin: 8px 8px 16px;
+        padding: 0;
+    }
+
+    /* Ensure the table itself contributes no borders/lines */
+    .ordersTable {
+        border: 0 !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    .ordersTable thead,
+    .ordersTable tbody,
+    .ordersTable tr,
+    .ordersTable td,
+    .ordersTable th {
+        border: 0 !important;
+    }
+
+    /* Card spacing without extra line at top/bottom */
+    .ordersTable tr {
+        margin: 0 0 12px;
+    }
+
+    .ordersTable tr:first-child {
+        margin-top: 0;
+    }
+
+    .ordersTable tr:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* Remove outer border + shadow but keep spacing */
+    .orders {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        overflow: visible;
+        margin: 12px 16px;
+        /* bring back side margin */
+        padding: 0;
+    }
+
+    /* Reset table to prevent full-width bleed */
+    .ordersTable {
+        width: 100%;
+        max-width: 100%;
+        border: 0 !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    /* Hide header row */
+    .ordersTable thead {
+        display: none;
+    }
+
+    /* Turn rows into cards */
+    .ordersTable,
+    .ordersTable tbody,
+    .ordersTable tr,
+    .ordersTable td {
+        display: block;
+        box-sizing: border-box;
+    }
+
+    .ordersTable tr {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        margin: 0 0 14px;
+        padding: 10px 12px;
+        box-shadow: 0 1px 3px rgba(2, 6, 23, 0.06);
+    }
+
+    .ordersTable td {
+        border: 0;
+        padding: 8px 4px;
+        display: grid;
+        grid-template-columns: 40% 1fr;
+        /* label | value */
+        gap: 6px 10px;
+        word-break: break-word;
+    }
+
+    .ordersTable td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #475569;
+    }
+
+    /* Fix margins between cards */
+    .ordersTable tr:first-child {
+        margin-top: 0;
+    }
+
+    .ordersTable tr:last-child {
+        margin-bottom: 0;
+    }
+}
