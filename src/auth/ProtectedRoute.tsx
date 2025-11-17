@@ -1,24 +1,23 @@
 // src/auth/ProtectedRoute.tsx
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import Navbar from "../components/Navbar/Navbar";
 
 export function ProtectedRoute() {
-  const { loading, isAuthed } = useAuth();
-  const loc = useLocation();
+    const { loading, isAuthed } = useAuth();
+    const navigation = useNavigate();
+    if (loading) return null;
 
-  if (loading) return null;
+    if (!isAuthed) {
+        navigation("/login");
+        return;
+        // return <Navigate to="/login" replace state={{ from: loc }} />;
+    }
 
-  if (!isAuthed) {
-    // choose one:
-    return <Navigate to="/login" replace state={{ from: loc }} />;
-    // or: return <Navigate to="/" replace state={{ from: loc }} />;
-  }
-
-  return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
-  );
+    return (
+        <>
+            <Navbar />
+            <Outlet />
+        </>
+    );
 }
