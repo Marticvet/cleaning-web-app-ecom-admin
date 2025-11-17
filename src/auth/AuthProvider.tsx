@@ -32,10 +32,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(null);
         setIsAdmin(null);
         setLoading(false);
+        localStorage.clear();
     }, []);
 
     const logoutAndReset = React.useCallback(async () => {
         try {
+            localStorage.clear();
             await supabase.auth.signOut();
         } finally {
             // always reset locally, even if supabase throws
@@ -92,6 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (event === "SIGNED_OUT") {
                 // refresh failed or explicit logout
                 setIsAdmin(null);
+                localStorage.clear();
             }
             setLoading(false);
         });
@@ -125,6 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     async function signOut() {
         await logoutAndReset();
+        localStorage.clear();
         // no navigate here → ProtectedRoute / LogoutRoute handles where to go
     }
 
