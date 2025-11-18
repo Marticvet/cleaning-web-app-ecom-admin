@@ -1,0 +1,84 @@
+.panel-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.panel-card {
+    background: #fff;
+    width: 420px;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.09);
+    font-family: system-ui, sans-serif;
+}
+
+.panel-card h1 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.panel-item {
+    margin-bottom: 16px;
+}
+
+.panel-item label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.panel-item p {
+    margin: 4px 0 0;
+    font-size: 1rem;
+}
+
+.panel-select {
+    margin-top: 6px;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    background: #f7f7f7;
+}
+
+.btn-primary {
+    width: 100%;
+    background: #0077ff;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 14px;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background: #0062d1;
+}
+
+.btn-danger {
+    width: 100%;
+    background: #ff3b30;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.btn-danger:hover {
+    background: #d53027;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}

@@ -1,15 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import "./OrdersTable.css";
 
 export type Order = {
     id: string;
-    customer: string;
+    customer_name: string;
     service: string;
-    createdAt: string; // ISO date
-    total: number; // €
-    status: "new" | "in_progress" | "scheduled" | "done" | "cancelled";
+    created_at: string; // ISO date
+    price: number; // €
+    status: "New" | "In progress" | "scheduled" | "done" | "cancelled";
 };
 
 export default function OrdersTable({ rows }: { rows: Order[] }) {
+    const navigate = useNavigate();
+
     return (
         <div className="orders">
             <table className="ordersTable" role="table">
@@ -26,17 +29,22 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
 
                 <tbody>
                     {rows.map((r) => (
-                        <tr key={r.id}>
+                        <tr
+                            key={r.id}
+                            onClick={() => {
+                                navigate(`/dashboard/${r.id}`);
+                            }}
+                        >
                             <td data-label="Bestellung #">{r.id}</td>
-                            <td data-label="Kunden Name">{r.customer}</td>
+                            <td data-label="Kunden Name">{r.customer_name}</td>
                             <td data-label="Service">{r.service}</td>
                             <td data-label="Erstellt am">
-                                {new Date(r.createdAt).toLocaleDateString()}
+                                {formatDateTime(r.created_at)}
                             </td>
-                            <td data-label="Preis">€{r.total.toFixed(2)}</td>
+                            <td data-label="Preis">€{r.price.toFixed(2)}</td>
                             <td data-label="Status">
                                 <span className={`badge ${r.status}`}>
-                                    {pretty(r.status)}
+                                    {r.status}
                                 </span>
                             </td>
                         </tr>
@@ -47,14 +55,12 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
     );
 }
 
-function pretty(s: Order["status"]) {
+function formatDateTime(iso: string) {
+    const d = new Date(iso);
+
     return (
-        {
-            new: "New",
-            in_progress: "In progress",
-            scheduled: "Scheduled",
-            done: "Completed",
-            cancelled: "Cancelled",
-        } as const
-    )[s];
+        d.toLocaleDateString("de-DE") +
+        " " +
+        d.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })
+    );
 }
