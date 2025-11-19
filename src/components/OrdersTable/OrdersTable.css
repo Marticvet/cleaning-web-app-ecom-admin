@@ -398,3 +398,56 @@
     background: #f9fafb;
     font-size: 0.85rem;
 }
+
+.orders-filter {
+    padding: 0 14px 8px;
+}
+
+.orders-filter input {
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .orders-filter {
+        padding: 0 8px 8px;
+    }
+}
+
+.orders-filter-input {
+    position: relative;
+}
+
+.orders-filter-input input {
+    width: 100%;
+    padding: 6px 28px 6px 10px; /* extra right padding for the X */
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    font-size: 0.9rem;
+}
+
+/* the X button */
+.orders-filter-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #9ca3af;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+}
+
+.orders-filter-clear:hover {
+    color: #4b5563;
+}

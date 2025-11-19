@@ -19,6 +19,8 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
     const [sortField, setSortField] = useState<keyof Order>("created_at");
     const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
     const [deleting, setDeleting] = useState(false);
+    const [search, setSearch] = useState("");
+    const term = search.trim().toLowerCase();
 
     // -------------------
     // SELECTION
@@ -156,7 +158,28 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                         </select>
                     </label>
                 </div>
-            </div>  
+            </div>
+
+            <div className="orders-filter">
+                <div className="orders-filter-input">
+                    <input
+                        type="text"
+                        placeholder="Suche in allen Bestellungen..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+
+                    {search && (
+                        <button
+                            type="button"
+                            className="orders-filter-clear"
+                            onClick={() => setSearch("")}
+                        >
+                            ×
+                        </button>
+                    )}
+                </div>
+            </div>
 
             <table className="ordersTable" role="table">
                 <thead>
@@ -168,6 +191,10 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                                     checked={selected.length === rows.length}
                                     onChange={toggleSelectAll}
                                 />
+
+                                {/* <button onClick={toggleSelectAll}>
+                                    Alle auswählen
+                                </button> */}
                                 {/* <span>Alle auswählen</span> */}
 
                                 {selected.length > 0 && (
@@ -199,41 +226,63 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                 </thead>
 
                 <tbody>
-                    {sortedRows.map((r) => (
-                        <tr
-                            key={r.id}
-                            onClick={(e) => {
-                                // prevent row click when clicking checkbox
-                                if (
-                                    (e.target as HTMLElement).tagName ===
-                                    "INPUT"
-                                )
-                                    return;
-                                navigate(`/dashboard/${r.id}`);
-                            }}
-                        >
-                            <td>
-                                {/* <label htmlFor="checkbox">Select</label> */}
-                                <input
-                                    type="checkbox"
-                                    checked={selected.includes(r.id)}
-                                    onChange={() => toggleSelect(r.id)}
-                                />
-                            </td>
-                            <td data-label="Bestellung #">{r.id}</td>
-                            <td data-label="Kunden Name">{r.customer_name}</td>
-                            <td data-label="Service">{r.service}</td>
-                            <td data-label="Erstellt am">
-                                {formatDateTime(r.created_at)}
-                            </td>
-                            <td data-label="Preis">€{r.price.toFixed(2)}</td>
-                            <td data-label="Status">
-                                <span className={`badge ${r.status}`}>
-                                    {r.status}
-                                </span>
-                            </td>
-                        </tr>
-                    ))}
+                    {sortedRows
+                        .filter((o) => {
+                            if (!term) return true;
+
+                            const haystack = [
+                                o.id,
+                                o.customer_name,
+                                o.service,
+                                o.status,
+                                o.created_at, // raw ISO date
+                                formatDateTime(o.created_at), // formatted date
+                                o.price.toString(),
+                            ]
+                                .join(" ")
+                                .toLowerCase();
+
+                            return haystack.includes(term);
+                        })
+                        .map((r) => (
+                            <tr
+                                key={r.id}
+                                onClick={(e) => {
+                                    // prevent row click when clicking checkbox
+                                    if (
+                                        (e.target as HTMLElement).tagName ===
+                                        "INPUT"
+                                    )
+                                        return;
+                                    navigate(`/dashboard/${r.id}`);
+                                }}
+                            >
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        checked={selected.includes(r.id)}
+                                        onChange={() => toggleSelect(r.id)}
+                                    />
+                                    {/* <label htmlFor="checkbox">Auswahle Bestellung</label> */}
+                                </td>
+                                <td data-label="Bestellung #">{r.id}</td>
+                                <td data-label="Kunden Name">
+                                    {r.customer_name}
+                                </td>
+                                <td data-label="Service">{r.service}</td>
+                                <td data-label="Erstellt am">
+                                    {formatDateTime(r.created_at)}
+                                </td>
+                                <td data-label="Preis">
+                                    €{r.price.toFixed(2)}
+                                </td>
+                                <td data-label="Status">
+                                    <span className={`badge ${r.status}`}>
+                                        {r.status}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
         </div>
