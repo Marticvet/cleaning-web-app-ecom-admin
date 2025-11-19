@@ -2,6 +2,7 @@ import "./Dashboard.css";
 import OrdersTable, { type Order } from "../OrdersTable/OrdersTable";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function Dashboard() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -30,7 +31,10 @@ export default function Dashboard() {
         fetchOrders();
     }, []);
 
-    if (loading) return <div>Loading…</div>;
+  if (loading){
+        return <LoadingSpinner />
+    };
+    
     if (error) return <div className="text-red-500">Error: {error}</div>;
 
     return (

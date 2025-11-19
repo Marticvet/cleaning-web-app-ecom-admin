@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import type { Order } from "../OrdersTable/OrdersTable";
 import "./CustomerPanel.css";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 function formatDateTime(iso: string) {
     const d = new Date(iso);
@@ -104,7 +105,10 @@ export default function CustomerPanel() {
         navigate("/dashboard");
     };
 
-    if (loading) return <div className="panel-wrapper">Lade…</div>;
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+
     if (error) return <div className="panel-wrapper error">{error}</div>;
     if (!order) return <div className="panel-wrapper">Nicht gefunden</div>;
 
