@@ -98,7 +98,7 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
 
     return (
         <div className="orders">
-            {/* <div className="orders-actions">
+            <div className="orders-actions">
                 <button
                     className="btn-danger"
                     disabled={selected.length === 0 || deleting}
@@ -110,7 +110,7 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                         ? "Lösche…"
                         : `Lösche ${selected.length} ausgewählte`}
                 </button>
-            </div> */}
+            </div>
 
             <table className="ordersTable" role="table">
                 <thead>

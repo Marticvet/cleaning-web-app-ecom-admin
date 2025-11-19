@@ -209,6 +209,13 @@
     margin-bottom: 12px;
 }
 
+
+@media (min-width: 768px){
+    .orders-actions {
+        display: none;
+    }
+}
+
 .select-header {
     display: flex;
     align-items: center;
