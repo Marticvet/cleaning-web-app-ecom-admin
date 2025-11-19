@@ -420,15 +420,18 @@
 
 .orders-filter-input {
     position: relative;
+    /* height: 40px !important; */
 }
 
 .orders-filter-input input {
     width: 100%;
-    padding: 6px 28px 6px 10px; /* extra right padding for the X */
+    padding: 6px 28px 6px 10px;
     border-radius: 8px;
     border: 1px solid #d1d5db;
     background: #f9fafb;
-    font-size: 0.9rem;
+    font-size: 16px;
+    height: 32px !important;
+    /* ⬅️ was 0.9rem */
 }
 
 /* the X button */
@@ -450,4 +453,19 @@
 
 .orders-filter-clear:hover {
     color: #4b5563;
+}
+
+@media (max-width: 768px) {
+    .orders-filter-input input {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
 }
