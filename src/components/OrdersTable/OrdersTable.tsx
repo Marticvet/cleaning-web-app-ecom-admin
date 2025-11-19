@@ -107,18 +107,56 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                     {selected.length === 0 ? "Alle Auswählen" : "Alle abwählen"}
                 </button>
 
-                <button
-                    className="btn-danger"
-                    disabled={selected.length === 0 || deleting}
-                    onClick={deleteSelected}
-                >
-                    {selected.length === 0
-                        ? "Keine Auswahl"
-                        : deleting
-                        ? "Lösche…"
-                        : `Lösche ${selected.length} ausgewählte`}
-                </button>
+                {selected.length > 0 && (
+                    <button
+                        className="btn-danger"
+                        disabled={selected.length === 0 || deleting}
+                        onClick={deleteSelected}
+                    >
+                        {selected.length === 0
+                            ? "Keine Auswahl"
+                            : deleting
+                            ? "Lösche…"
+                            : `Lösche ${selected.length} ausgewählte`}
+                    </button>
+                )}
             </div>
+
+            <div className="orders-toolbar">
+                <div className="sort-controls">
+                    <label>
+                        Sortieren nach:
+                        <select
+                            value={sortField}
+                            onChange={(e) =>
+                                setSortField(e.target.value as keyof Order)
+                            }
+                        >
+                            <option value="created_at">Erstellt am</option>
+                            <option value="id">Bestellung #</option>
+                            <option value="customer_name">Kunden Name</option>
+                            <option value="service">Service</option>
+                            <option value="price">Preis</option>
+                            <option value="status">Status</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Reihenfolge:
+                        <select
+                            value={sortDirection}
+                            onChange={(e) =>
+                                setSortDirection(
+                                    e.target.value as "asc" | "desc"
+                                )
+                            }
+                        >
+                            <option value="asc">Aufsteigend</option>
+                            <option value="desc">Absteigend</option>
+                        </select>
+                    </label>
+                </div>
+            </div>  
 
             <table className="ordersTable" role="table">
                 <thead>
@@ -175,6 +213,7 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
                             }}
                         >
                             <td>
+                                {/* <label htmlFor="checkbox">Select</label> */}
                                 <input
                                     type="checkbox"
                                     checked={selected.includes(r.id)}
