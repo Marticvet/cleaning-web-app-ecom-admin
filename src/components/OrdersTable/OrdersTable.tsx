@@ -100,6 +100,14 @@ export default function OrdersTable({ rows }: { rows: Order[] }) {
         <div className="orders">
             <div className="orders-actions">
                 <button
+                    className="btn-selectAll"
+                    // disabled={selected.length === 0 || deleting}
+                    onClick={toggleSelectAll}
+                >
+                    {selected.length === 0 ? "Alle Auswählen" : "Alle abwählen"}
+                </button>
+
+                <button
                     className="btn-danger"
                     disabled={selected.length === 0 || deleting}
                     onClick={deleteSelected}

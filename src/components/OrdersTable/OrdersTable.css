@@ -209,13 +209,6 @@
     margin-bottom: 12px;
 }
 
-
-@media (min-width: 768px){
-    .orders-actions {
-        display: none;
-    }
-}
-
 .select-header {
     display: flex;
     align-items: center;
@@ -327,4 +320,40 @@
 .error {
     color: red;
     font-weight: bold;
+}
+
+/* delete button: smaller, not full width */
+.btn-selectAll {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #3086ff;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    transition: 0.2s;
+    width: 100%;
+    height: 42.5px;
+}
+
+.btn-selectAll:hover {
+    background: #304fff;
+}
+
+
+@media (min-width: 768px){
+    .orders-actions {
+        display: none;
+    }
+
+    .ordersTable input[type="checkbox"] {
+        transform: scale(1.1);
+        cursor: pointer;
+        height: 20px;
+        width: 20px;
+    }
 }
