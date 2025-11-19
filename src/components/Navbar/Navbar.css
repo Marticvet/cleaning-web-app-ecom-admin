@@ -211,6 +211,14 @@
     gap: 12px;
 }
 
+.navButtonsWrapper {
+    justify-self: center;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: 12px;
+}
+
 .hamburger {
     grid-column: 3;
     justify-self: end;
@@ -253,14 +261,6 @@
 .navButtonsWrapper,
 .hamburger {
     min-width: 0;
-}
-
-.navButtonsWrapper {
-    justify-self: center;
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    gap: 12px;
 }
 
 .mobileMenu {
